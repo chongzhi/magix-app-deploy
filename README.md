@@ -37,7 +37,12 @@ ps:此工具基于magix-app-build,请先配置它，工具地址：https://www.n
   * `grunt daily` (daily分支下) -- 基于daily分支的magix压缩，发布daily环境
   * `grunt publish` (master下) -- 基于master的发布cdn
 
-### Gruntfile.js高级配置：
+
+
+
+
+------------------------
+### Gruntfile.js进阶配置：
     //以下配置可全部省略
     //从master分支执行 `grunt checkout` 会checkout一个daily分支为version+1版的(此daily分支给测试使用)
     checkout: {
