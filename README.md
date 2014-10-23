@@ -33,7 +33,7 @@ ps:此工具基于magix-app-build,请先配置它，工具地址：https://www.n
 ### 工具使用:
   命令集：
 
-  * grunt checkout (master下) -- 基于master的package.json的version+1为daily名称，checkout新开发分支
-  * grunt daily (daily分支下) -- 基于daily分支的magix压缩，发布daily环境
-  * grunt publish (master下) -- 基于master的发布cdn
+  * `grunt checkout` (master下) -- 基于master的package.json的version+1为daily名称，checkout新开发分支
+  * `grunt daily` (daily分支下) -- 基于daily分支的magix压缩，发布daily环境
+  * `grunt publish` (master下) -- 基于master的发布cdn
 
