@@ -37,3 +37,6 @@ ps:此工具基于magix-app-build,请先配置它，工具地址：https://www.n
   * `grunt daily` (daily分支下) -- 基于daily分支的magix压缩，发布daily环境
   * `grunt publish` (master下) -- 基于master的发布cdn
 
+### 实例参考:
+  gitlab平台 thx/scaffold 脚手架仓库
+
