@@ -1,89 +1,41 @@
-# magix-app-deploy
+# Magix项目gitlab自动部署工具
 
-> deploy magix project and release to gitlab cdn
+This is the tools used for the release of Magix Application
 
-## Getting Started
-This plugin requires Grunt `~0.4.5`
+## 使用方法
 
-If you haven't used [Grunt](http://gruntjs.com/) before, be sure to check out the [Getting Started](http://gruntjs.com/getting-started) guide, as it explains how to create a [Gruntfile](http://gruntjs.com/sample-gruntfile) as well as install and use Grunt plugins. Once you're familiar with that process, you may install this plugin with this command:
+### 首次使用
+* 安装node环境
+* 安装grunt-cli http://gruntjs.com/getting-started (如果有0.4.0以下版本的grunt 请执行npm uninstall -g grunt卸载，再安装grunt-cli)
 
-```shell
-npm install magix-app-deploy --save-dev
-```
+### 项目配置
 
-Once the plugin has been installed, it may be enabled inside your Gruntfile with this line of JavaScript:
+#### 配置你项目的package.json如下：
+    {
+      "name": "scafflod",
+      "version": "0.0.1", //
+      "devDependencies": {
+        "grunt": "~0.4.1",
+        "time-grunt": "^0.3.2",
+        "magix-app-build": "",
+        "magix-app-deploy": ""
+      }
+    }
 
-```js
-grunt.loadNpmTasks('magix-app-deploy');
-```
+#### 执行npm install
 
-## The "magix_app_deploy" task
+#### 配置你的Gruntfile.js 如下即可：
+    grunt.loadNpmTasks('magix-app-deploy')
 
-### Overview
-In your project's Gruntfile, add a section named `magix_app_deploy` to the data object passed into `grunt.initConfig()`.
+    ps:此工具基于magix-app-build,请先配置它，工具地址：https://www.npmjs.org/package/magix-app-build
 
-```js
-grunt.initConfig({
-  magix_app_deploy: {
-    options: {
-      // Task-specific options go here.
-    },
-    your_target: {
-      // Target-specific file lists and/or options go here.
-    },
-  },
-});
-```
 
-### Options
+### 工具使用:
+  命令集：
 
-#### options.separator
-Type: `String`
-Default value: `',  '`
+  grunt checkout (master下)
 
-A string value that is used to do something with whatever.
+  grunt daily (daily分支下)
 
-#### options.punctuation
-Type: `String`
-Default value: `'.'`
+  grunt publish (master下)
 
-A string value that is used to do something else with whatever else.
-
-### Usage Examples
-
-#### Default Options
-In this example, the default options are used to do something with whatever. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result would be `Testing, 1 2 3.`
-
-```js
-grunt.initConfig({
-  magix_app_deploy: {
-    options: {},
-    files: {
-      'dest/default_options': ['src/testing', 'src/123'],
-    },
-  },
-});
-```
-
-#### Custom Options
-In this example, custom options are used to do something else with whatever else. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result in this case would be `Testing: 1 2 3 !!!`
-
-```js
-grunt.initConfig({
-  magix_app_deploy: {
-    options: {
-      separator: ': ',
-      punctuation: ' !!!',
-    },
-    files: {
-      'dest/default_options': ['src/testing', 'src/123'],
-    },
-  },
-});
-```
-
-## Contributing
-In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
-
-## Release History
-_(Nothing yet)_
