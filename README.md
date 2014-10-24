@@ -2,6 +2,13 @@
 
 This is the tools used for the release of Magix Application
 
+
+## 写在最前
+    简述下这个工具期望的开发流程：
+      1、来新需求了，从master 执行`grunt checkout` checkout一个开发用的daily分支，分支名会自动基于master下的package.json里的version版本+1（如0.0.1+1）
+      2、将daily分支名给到开发测试(如0.0.1，即magix所需要的cdn文件路径)，在daily分支执行`grunt daily`压缩代码并部署到daily环境，开发测试直接可以看到最新结果
+      3、所有开发提测完毕，合并daily分支到master，从master执行`grunt publish`即发布到正式cdn环境
+
 ## 使用方法
 
 ### 首次使用
@@ -33,12 +40,9 @@ ps:此工具基于magix-app-build,请先配置它，工具地址：https://www.n
 ### 工具使用:
   命令集：
 
-  * `grunt checkout` (master下) -- 基于master的package.json的version+1为daily名称，checkout新开发分支
-  * `grunt daily` (daily分支下) -- 基于daily分支的magix压缩，发布daily环境
-  * `grunt publish` (master下) -- 基于master的发布cdn
-
-
-
+  * `grunt checkout` (master下)
+  * `grunt daily` (daily分支下)
+  * `grunt publish` (master下)
 
 
 ------------------------
@@ -47,14 +51,14 @@ ps:此工具基于magix-app-build,请先配置它，工具地址：https://www.n
     //从master分支执行 `grunt checkout` 会checkout一个daily分支为version+1版的(此daily分支给测试使用)
     checkout: {
       options: {
-        setVersion: 'index.html' // 配置是否在checkout daily分支的时候，就将daily分支写入index.html的version中
+        setVersion: 'index.html' // 配置是否在checkout daily分支的时候，就将daily分支写入index.html的version中，默认不写入
       }
     },
 
     //daily分支下执行 `grunt daily` 会压缩项目代码并push到当前daily分支(daily分支复用)
     daily: {
       options: {
-        buildName: 'magix' // 配置压缩magix项目代码的命令名
+        buildName: 'magix' // 配置压缩magix项目代码的命令名，默认名magix
       }
     },
 
