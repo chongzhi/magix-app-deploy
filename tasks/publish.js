@@ -80,7 +80,7 @@ module.exports = function(grunt) {
               'git pull origin master',
               'git remote prune origin', //清理远程已发布的分枝
               'git branch -D daily/' + tag, //删除本地已发布的分枝
-              'echo -e "\033[44;37m cdn发布成功，cdn版本号是：' + tag + ' \033[0m"'
+              'echo -e "\033[44;37m cdn发布成功，cdn版本号是: ' + tag + ' \033[0m"'
             ].join('&&')
           }
         }

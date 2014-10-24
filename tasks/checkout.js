@@ -56,7 +56,7 @@ module.exports = function(grunt) {
               'git commit -m "commit"',
               'git push origin master',
               'git checkout -b daily/' + _version,
-              'echo -e "\033[44;37m checout开发daily分支成功，分支号为：' + _version + '，此daily分支为覆盖复用发布 \033[0m"'
+              'echo -e "\033[44;37m checout开发daily分支成功，分支号为: ' + _version + ' ，此daily分支为覆盖复用发布 \033[0m"'
             ].join('&&')
           }
         }
