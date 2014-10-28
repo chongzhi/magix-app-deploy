@@ -58,7 +58,7 @@ ps:此工具基于magix-app-build,请先配置它，工具地址：https://www.n
     //daily分支下执行 `grunt daily` 会压缩项目代码并push到当前daily分支(daily分支复用)
     daily: {
       options: {
-        buildName: 'magix' // 配置压缩magix项目代码的命令名，默认名magix
+        buildName: 'magix' // 配置压缩magix项目代码的命令名，默认名magix(内部会执行grunt magix这种命令，可以配置成你项目适合的压缩命令)
       }
     },
 
