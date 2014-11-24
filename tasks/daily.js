@@ -43,7 +43,7 @@ module.exports = function(grunt) {
 
             return [
               'git push origin daily/' + version,
-              'echo -e "\033[44;37m daily/ ' + version + ' 分支压缩并发布成功 \033[0m"'
+              'echo -e "\033[44;37m daily/ ' + version + ' 分支压缩并发布成功，如有代码更改，直接在当前daily分支执行grunt daily即可压缩代码并发布到daily环境 \033[0m"'
             ].join('&&')
           }
         }
