@@ -21,6 +21,7 @@ module.exports = function(grunt) {
     var setVersion = args.setVersion
     var tag = grunt.template.today("yyyymmdd.HHMMss.l") //年月日.时分秒.毫秒
 
+
     grunt.initConfig({
       //自动打包发daily cdn流程 命令行工具
       shell: {
@@ -57,16 +58,22 @@ module.exports = function(grunt) {
           command: function() {
             return [
               'grunt ' + buildName,
+              'git branch > current_branch.md', //防止commit没有更改的文件报错，abort流程
               'git add . -A',
-              //待解决：grunt shell对于没有更改文件的commit会报错, abort掉后面的操作
-              //解决：加--force
               'git commit -m "build"'
             ].join('&&')
           }
         },
 
         dailyPushCdn: {
-          command: 'git push origin daily/' + tag
+          command: function() {
+            return [
+              'rm current_branch.md',
+              'git add . -A',
+              'git commit -m "build"',
+              'git push origin daily/' + tag
+            ].join('&&')
+          }
         },
 
         //发布daily之后的cdn发布

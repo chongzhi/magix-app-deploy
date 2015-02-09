@@ -29,21 +29,34 @@ module.exports = function(grunt) {
           command: function() {
             return [
               'grunt ' + buildName,
+              'git branch > current_branch.md', //将当前分支信息临时写入文件，后面读取，同时防止commit没有更改的文件报错，abort流程
               'git add . -A',
               //待解决：grunt shell对于没有更改文件的commit会报错, abort掉后面的操作
               //解决：加--force
-              'git commit -m "build"'
+              'git commit -m "daily"'
             ].join('&&')
           }
         },
         dailyPush: {
           command: function() {
-            var pkg = grunt.file.readJSON('package.json')
-            var version = pkg.version
+
+            //获取切换分支前的分支名
+            function getCurrentBranch() {
+              var branchs = grunt.file.read('current_branch.md')
+              var current = /.*\*\s([\S]+)\s*/.exec(branchs)[1] //拿到当前分支名
+              console.log('所有分支：====> \n' + branchs)
+              console.log('当前分支：====> ' + current)
+              return current
+            }
+
+            var currentBranch = getCurrentBranch()
 
             return [
-              'git push origin daily/' + version,
-              'echo -e "\033[44;37m daily/ ' + version + ' 分支压缩并发布成功，如有代码更改，直接在当前daily分支执行grunt daily即可压缩代码并发布到daily环境 \033[0m"'
+              'rm current_branch.md',
+              'git add . -A',
+              'git commit -m "daily"',
+              'git push origin ' + currentBranch,
+              'echo -e "\033[44;37m '+ currentBranch +'分支压缩并发布成功 \033[0m"'
             ].join('&&')
           }
         }
