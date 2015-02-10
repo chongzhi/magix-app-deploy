@@ -45,7 +45,7 @@ module.exports = function(grunt) {
               var branchs = grunt.file.read('current_branch.md')
               var current = /.*\*\s([\S]+)\s*/.exec(branchs)[1] //拿到当前分支名
               console.log('所有分支：====> \n' + branchs)
-              console.log('当前分支：====> ' + current)
+              console.log('当前分支：====> ' + current + '\n')
               return current
             }
 
