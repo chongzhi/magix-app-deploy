@@ -7,7 +7,7 @@ This is the tools used for the release of Magix Application
     简述下这个工具期望的开发流程：
       1、来新需求了，从master 执行`grunt checkout` checkout一个开发用的daily分支，分支名会自动基于master下的package.json里的version版本+1（如0.0.1+1）
       2、将daily分支名给到开发测试(如0.0.1，即magix所需要的cdn文件路径)，在daily分支执行`grunt daily`压缩代码并部署到daily环境，开发测试直接可以看到最新结果
-      3、所有开发提测完毕，合并daily分支到master，从master执行`grunt publish`即发布到正式cdn环境
+      3、所有开发提测完毕，执行grunt publish 即可发布代码到cdn上（中间会先合并代码到master然后发布）
 
 ## 使用方法
 
