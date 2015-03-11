@@ -46,9 +46,9 @@ module.exports = function(grunt) {
         //合并压缩magix app代码
         dailyBuild: {
           command: function() {
-            var currentBranch = getCurrentBranch()
+            // var currentBranch = getCurrentBranch()
             return [
-              'git pull origin ' + currentBranch,
+              // 'git pull origin ' + currentBranch,
               'grunt ' + buildName,
               'git add . -A',
               'git commit -m "daily"'
