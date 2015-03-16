@@ -126,6 +126,7 @@ module.exports = function(grunt) {
               'git push origin master',
               'git checkout ' + currentBranch,
               'git merge master',
+              'git push origin ' + currentBranch,
               'echo -e "\033[44;37m cdn发布成功，cdn版本号是: ' + tag + ' \033[0m"'
             ].join('&&')
           }
