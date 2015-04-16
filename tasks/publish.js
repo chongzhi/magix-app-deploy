@@ -78,13 +78,13 @@ module.exports = function(grunt) {
         //发布daily之后的cdn发布
         cdn: {
           command: function() {
-            var currentBranch = getCurrentBranch()
+            // var currentBranch = getCurrentBranch()
             return [
               'git tag publish/' + tag,
               'git push origin publish/' + tag,
               'git checkout master',
               'git pull origin master',
-              'git remote prune origin', //清理远程已发布的分枝
+              // 'git remote prune origin', //清理远程已发布的分枝
               'git branch -D daily/' + tag, //删除本地已发布的daily分枝
               // 'git push origin :daily/' + tag, //删除远程已发布的daily分枝
               'rm current_branch.md',
