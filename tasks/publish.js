@@ -35,41 +35,16 @@ module.exports = function(grunt) {
       shell: {
 
         //--------grunt publish---------
-
-        //git branch
         saveBranch: {
           command: function() {
             return [
+              'git checkout master',
               'git branch > current_branch.md' //将当前分支信息临时写入文件，后面读取，同时防止commit没有更改的文件报错，abort流程
             ].join('&&')
           }
         },
 
-        pushCurrent: {
-          command: function() {
-            var currentBranch = getCurrentBranch()
-            return [
-              'git add . -A',
-              'git commit -m "publish"',
-              'git push origin ' + currentBranch,
-              'git merge master'
-            ].join('&&')
-          }
-        },
-
-        //checkout
-        checkout: {
-          command: function() {
-            var currentBranch = getCurrentBranch()
-            return [
-              'git checkout master',
-              'git pull origin master', //更新本地master代码
-              'git merge ' + currentBranch
-            ].join('&&')
-          }
-        },
-
-        setVersion: {
+        build: {
           command: function() {
 
             //将最新的vertion更新到index.html里面 -- 不过多干涉开发 -- 改成可配置
@@ -77,37 +52,28 @@ module.exports = function(grunt) {
               var index = grunt.file.read(setVersion)
               grunt.file.write(setVersion, index.replace(/var version = \'.+\'/, "var version = '" + tag + "'"))
             }
-            var cmds = setVersion ? ['git add . -A', 'git commit -m "set version in index.html" '] : []
 
-            return cmds.concat([
-              'git push origin master',
-              'git checkout -b daily/' + tag
-            ]).join('&&')
+            var currentBranch = getCurrentBranch()
+            return [
+              'grunt ' + buildName,
+              'git add . -A',
+              'git commit -m "by magix-app-deploy - 崇志"',
+              'git push origin ' + currentBranch //master
+            ].join('&&')
+
           }
         },
 
         //合并压缩magix app代码
-        dailyBuild: {
+        checkoutDaily: {
           command: function() {
             return [
-              'grunt ' + buildName,
-              'git branch > current_branch.mdd', //防止commit没有更改的文件报错，abort流程
-              'git add . -A',
-              'git commit -m "build"'
-            ].join('&&')
-          }
-        },
-
-        dailyPushCdn: {
-          command: function() {
-            return [
-              'rm current_branch.mdd',
-              'git add . -A',
-              'git commit -m "build"',
+              'git checkout -b daily/' + tag,
               'git push origin daily/' + tag
             ].join('&&')
           }
         },
+
 
         //发布daily之后的cdn发布
         cdn: {
@@ -120,14 +86,11 @@ module.exports = function(grunt) {
               'git pull origin master',
               'git remote prune origin', //清理远程已发布的分枝
               'git branch -D daily/' + tag, //删除本地已发布的daily分枝
-              'git push origin :daily/' + tag, //删除远程已发布的daily分枝
+              // 'git push origin :daily/' + tag, //删除远程已发布的daily分枝
               'rm current_branch.md',
               'git add . -A',
               'git commit -m "delete current_branch.md"',
               'git push origin master',
-              'git checkout ' + currentBranch,
-              'git merge master',
-              'git push origin ' + currentBranch,
               'echo -e "\033[44;37m cdn发布成功，cdn版本号是: ' + tag + ' \033[0m"'
             ].join('&&')
           }
@@ -137,12 +100,10 @@ module.exports = function(grunt) {
 
     //从master checkout一个daily分支来开发项目
     grunt.task.run('shell:saveBranch')
-    grunt.task.run('shell:pushCurrent')
-    grunt.task.run('shell:checkout')
-    grunt.task.run('shell:setVersion')
-    grunt.task.run('shell:dailyBuild')
-    grunt.task.run('shell:dailyPushCdn')
+    grunt.task.run('shell:build')
+    grunt.task.run('shell:checkoutDaily')
     grunt.task.run('shell:cdn')
+
   })
 
 };
