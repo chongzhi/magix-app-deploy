@@ -83,7 +83,7 @@ module.exports = function(grunt) {
               'git tag publish/' + tag,
               'git push origin publish/' + tag,
               'git checkout master',
-              'git pull origin master',
+              // 'git pull origin master',
               'git branch -D daily/' + tag, //删除本地已发布的daily分枝
               // 'git push origin :daily/' + tag, //删除远程已发布的daily分枝,
               // 不能直接删除远程daily分支，因为发布cdn还未成功
