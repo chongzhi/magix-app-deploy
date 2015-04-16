@@ -84,14 +84,16 @@ module.exports = function(grunt) {
               'git push origin publish/' + tag,
               'git checkout master',
               'git pull origin master',
-              // 'git remote prune origin', //清理远程已发布的分枝
               'git branch -D daily/' + tag, //删除本地已发布的daily分枝
-              // 'git push origin :daily/' + tag, //删除远程已发布的daily分枝
+              // 'git push origin :daily/' + tag, //删除远程已发布的daily分枝,
+              // 不能直接删除远程daily分支，因为发布cdn还未成功
+              // 稍后执行git remote prune origin 清理远程daily分支
               'rm current_branch.md',
               'git add . -A',
               'git commit -m "delete current_branch.md"',
               'git push origin master',
-              'echo -e "\033[44;37m cdn发布成功，cdn版本号是: ' + tag + ' \033[0m"'
+              'echo -e "\033[44;37m cdn发布成功，cdn版本号是: ' + tag + ' \033[0m"',
+              'git remote prune origin' //清理远程已发布的分枝
             ].join('&&')
           }
         }
