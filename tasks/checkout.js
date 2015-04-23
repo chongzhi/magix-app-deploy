@@ -19,20 +19,46 @@ module.exports = function(grunt) {
     var args = this.options() || {}
     var setVersion = args.setVersion
 
+    //获取切换分支前的分支名
+    function getCurrentBranch() {
+      var branchs = grunt.file.read('current_branch.md')
+      var current = /.*\*\s([\S]+)\s*/.exec(branchs)[1] //拿到当前分支名
+      console.log('所有分支：====> \n' + branchs)
+      console.log('当前分支：====> ' + current + '\n')
+      return current
+    }
+
     grunt.initConfig({
       //自动打包发daily cdn流程 命令行工具
       shell: {
+        getBranchName: {
+          command: function() {
+            return [
+              'git branch > current_branch.md'
+            ].join('&&')
+          }
+        },
         //------grunt checkout--------
         gotoMaster: {
           command: function() {
-            return [
-              'git checkout master',
-              'git pull origin master'
-            ].join('&&')
+            var notMaster = getCurrentBranch() !== 'master'
+
+              if (notMaster) { //必须在master下执行
+                return [
+                  'rm current_branch.md',
+                  ':::::请切到master分支再执行该命令:::::'
+                ].join('&&')
+              } else {
+                return [
+                  'rm current_branch.md',
+                  'git pull origin master'
+                ].join('&&')
+              }
           }
         },
         checkoutDaily: {
           command: function() {
+
             //获取package.json里的version并+1
             var pkg = grunt.file.readJSON('package.json')
             var version = pkg.version.split('.')
@@ -64,6 +90,7 @@ module.exports = function(grunt) {
     })
 
     //从master checkout一个daily分支来开发项目
+    grunt.task.run('shell:getBranchName')
     grunt.task.run('shell:gotoMaster')
     grunt.task.run('shell:checkoutDaily')
 
