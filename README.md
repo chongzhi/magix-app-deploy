@@ -40,9 +40,9 @@ ps:此工具基于magix-app-build,请先配置它，工具地址：https://www.n
 ### 工具使用:
   命令集：
 
-  * `grunt checkout` (master下)
-  * `grunt daily` (daily分支下)
-  * `grunt publish` (master下)
+  * 【master下】：`grunt checkout` - 从主干checkout一个新分支开发，自动基于vertion + 1
+  * 【daily下】： `grunt daily` - 在日常daily分支下开发的时候执行，包含了压缩以及push到daily服务器
+  * 【master下】：`grunt publish` - 项目开发完毕正式发布cdn，将代码merge到master，从master执行grunt publish 一键发布，发布完成后会拿到版本号，给到开发即可
 
 
 ------------------------
