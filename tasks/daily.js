@@ -32,6 +32,13 @@ module.exports = function(grunt) {
       return current
     }
 
+    //获取当前项目名称，拼出cdn 或 daily 最终地址
+    function getProjectName() {
+      var pwd = grunt.file.read('pwd.md').trim().split('/')
+      var projectName = pwd[pwd.length - 1]
+      return projectName
+    }
+
     grunt.initConfig({
 
       //自动打包发daily cdn流程 命令行工具
@@ -42,6 +49,7 @@ module.exports = function(grunt) {
         saveBranch: {
           command: function() {
             return [
+              'pwd > pwd.md',
               'git branch > current_branch.md' //将当前分支信息临时写入文件，后面读取，同时防止commit没有更改的文件报错，abort流程
             ].join('&&')
           }
@@ -67,12 +75,16 @@ module.exports = function(grunt) {
         dailyPush: {
           command: function() {
             var currentBranch = getCurrentBranch()
+            var projectName = getProjectName()
+
             return [
               'rm current_branch.md',
+              'rm pwd.md',
               'git add . -A',
               'git commit -m "daily"',
               'git push origin ' + currentBranch,
-              'echo -e "\033[44;37m ' + currentBranch + '分支压缩并发布成功 \033[0m"'
+              'echo "\033[44;37m ' + currentBranch + '分支压缩并发布成功 \033[0m"',
+              'echo "\033[35m daily文件完整目录地址是：http://g-assets.daily.taobao.net/mm/'+ projectName +'/'+ currentBranch.split('/')[1] +'/ \033[0m"'
             ].join('&&')
           }
         }

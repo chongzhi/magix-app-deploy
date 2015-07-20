@@ -34,6 +34,13 @@ module.exports = function(grunt) {
       return current
     }
 
+    //获取当前项目名称，拼出cdn 或 daily 最终地址
+    function getProjectName() {
+      var pwd = grunt.file.read('pwd.md').trim().split('/')
+      var projectName = pwd[pwd.length - 1]
+      return projectName
+    }
+
     grunt.initConfig({
       //自动打包发daily cdn流程 命令行工具
       shell: {
@@ -43,6 +50,7 @@ module.exports = function(grunt) {
           command: function() {
             return [
               'git checkout master',
+              'pwd > pwd.md',
               'git branch > current_branch.md' //将当前分支信息临时写入文件，后面读取，同时防止commit没有更改的文件报错，abort流程
             ].join('&&')
           }
@@ -87,6 +95,7 @@ module.exports = function(grunt) {
         //发布daily之后的cdn发布
         cdn: {
           command: function() {
+            var projectName = getProjectName()
             // var currentBranch = getCurrentBranch()
             return [
               'git tag publish/' + tag,
@@ -98,10 +107,12 @@ module.exports = function(grunt) {
               // 不能直接删除远程daily分支，因为发布cdn还未成功
               // 稍后执行git remote prune origin 清理远程daily分支
               'rm current_branch.md',
+              'rm pwd.md',
               'git add . -A',
               'git commit -m "delete current_branch.md"',
               'git push origin master',
               'echo -e "\033[44;37m cdn发布成功，cdn版本号是: ' + tag + ' \033[0m"',
+              'echo -e "\033[35m cdn文件完整目录地址是：http://g.alicdn.com/mm/'+ projectName +'/' + tag + '/ \033[0m"',
               'git remote prune origin' //清理远程已发布的分枝
             ].join('&&')
           }
