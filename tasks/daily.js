@@ -17,7 +17,11 @@ module.exports = function(grunt) {
 
   grunt.registerTask('daily', 'build and push daily branch', function(e, d) {
     var args = this.options() || {}
-    var buildName = args.buildName || 'magix'
+    var buildName
+    if (args.buildName === undefined) {
+      buildName = 'magix'
+    }
+    // var buildName = args.buildName || 'magix'
 
       //获取切换分支前的分支名
     function getCurrentBranch() {
@@ -47,12 +51,17 @@ module.exports = function(grunt) {
         dailyBuild: {
           command: function() {
             // var currentBranch = getCurrentBranch()
-            return [
-              // 'git pull origin ' + currentBranch,
-              'grunt ' + buildName,
+
+            var commands = [
               'git add . -A',
               'git commit -m "daily"'
-            ].join('&&')
+            ]
+
+            if (buildName) {
+              commands.unshift('grunt ' + buildName)
+            }
+
+            return commands.join('&&')
           }
         },
         dailyPush: {

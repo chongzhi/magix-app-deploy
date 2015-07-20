@@ -17,7 +17,11 @@ module.exports = function(grunt) {
 
   grunt.registerTask('publish', 'publish to cdn from gitlab', function() {
     var args = this.options() || {}
-    var buildName = args.buildName || 'magix'
+    var buildName
+    if (args.buildName === undefined) {
+      buildName = 'magix'
+    }
+    // var buildName = args.buildName || 'magix'
     var setVersion = args.setVersion
     var tag = grunt.template.today("yyyymmdd.HHMMss.l") //年月日.时分秒.毫秒
 
@@ -54,12 +58,17 @@ module.exports = function(grunt) {
             }
 
             var currentBranch = getCurrentBranch()
-            return [
-              'grunt ' + buildName,
+            var commands = [
               'git add . -A',
               'git commit -m "by magix-app-deploy - 崇志"',
               'git push origin ' + currentBranch //master
-            ].join('&&')
+            ]
+
+            if (buildName) {
+              commands.unshift('grunt ' + buildName)
+            }
+
+            return commands.join('&&')
 
           }
         },
