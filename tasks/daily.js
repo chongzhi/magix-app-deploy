@@ -17,11 +17,10 @@ module.exports = function(grunt) {
 
   grunt.registerTask('daily', 'build and push daily branch', function(e, d) {
     var args = this.options() || {}
-    var buildName
-    if (args.buildName === undefined) {
+    var buildName = args.buildName
+    if (buildName === undefined) { //不传buildName默认执行grunt magix压缩工具
       buildName = 'magix'
     }
-    // var buildName = args.buildName || 'magix'
 
       //获取切换分支前的分支名
     function getCurrentBranch() {

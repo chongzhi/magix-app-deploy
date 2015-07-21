@@ -17,11 +17,12 @@ module.exports = function(grunt) {
 
   grunt.registerTask('publish', 'publish to cdn from gitlab', function() {
     var args = this.options() || {}
-    var buildName
-    if (args.buildName === undefined) {
+    var buildName = args.buildName
+
+    if (buildName === undefined) {
       buildName = 'magix'
     }
-    // var buildName = args.buildName || 'magix'
+
     var setVersion = args.setVersion
     var tag = grunt.template.today("yyyymmdd.HHMMss.l") //年月日.时分秒.毫秒
 
