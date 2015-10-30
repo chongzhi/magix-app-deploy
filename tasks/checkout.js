@@ -18,6 +18,7 @@ module.exports = function(grunt) {
   grunt.registerTask('checkout', 'checkout daily branch from master', function() {
     var args = this.options() || {}
     var setVersion = args.setVersion
+    var tag = grunt.template.today("yyyymmdd.HHMMss.l") //年月日.时分秒.毫秒
 
     //获取切换分支前的分支名
     function getCurrentBranch() {
@@ -60,15 +61,16 @@ module.exports = function(grunt) {
           command: function() {
 
             //获取package.json里的version并+1
-            var pkg = grunt.file.readJSON('package.json')
-            var version = pkg.version.split('.')
-            var last = parseInt(version.pop(), 10) + 1
-            version.push(last)
-            var _version = version.join('.')
+            // var pkg = grunt.file.readJSON('package.json')
+            // var version = pkg.version.split('.')
+            // var last = parseInt(version.pop(), 10) + 1
+            // version.push(last)
+            // var _version = version.join('.')
 
             //将+1后的version写入package.json
-            pkg.version = _version
-            grunt.file.write('package.json', JSON.stringify(pkg, null, 2))
+            // pkg.version = _version
+            // grunt.file.write('package.json', JSON.stringify(pkg, null, 2))
+            var _version = tag
 
 
             //将最新的vertion更新到index.html里面 -- 不过多干涉开发 -- 改成可配置
@@ -78,9 +80,9 @@ module.exports = function(grunt) {
             }
 
             return [
-              'git add . -A',
-              'git commit -m "commit"',
-              'git push origin master',
+              // 'git add . -A',
+              // 'git commit -m "commit"',
+              // 'git push origin master',
               'git checkout -b daily/' + _version,
               'echo -e "\033[44;37m checout开发daily分支成功，分支号为: ' + _version + ' ，此daily分支可重复使用，在此分支下执行grunt daily即可发布到daily环境 \033[0m"'
             ].join('&&')
