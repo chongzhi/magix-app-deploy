@@ -43,6 +43,24 @@ module.exports = function(grunt) {
     }
 
     grunt.initConfig({
+      //daily发完需要同步oss比较慢，所以做个延迟5S再发布到cdn
+      wait: {
+        options: {
+          delay: 5000
+        },
+        pause: {
+          options: {
+            before: function() {
+              // console.log('start wait 5s')
+            },
+            after: function() {
+              // console.log('end wait')
+            }
+          }
+        }
+      },
+
+
       //自动打包发daily cdn流程 命令行工具
       shell: {
 
@@ -92,12 +110,11 @@ module.exports = function(grunt) {
           }
         },
 
-
         //发布daily之后的cdn发布
         cdn: {
           command: function() {
             var projectName = getProjectName()
-            // var currentBranch = getCurrentBranch()
+              // var currentBranch = getCurrentBranch()
             return [
               'git tag publish/' + tag,
               'git push origin publish/' + tag,
@@ -113,7 +130,7 @@ module.exports = function(grunt) {
               'git commit -m "delete current_branch.md"',
               'git push origin master',
               'echo -e "\033[44;37m cdn发布成功，cdn版本号是: ' + tag + ' \033[0m"',
-              'echo -e "\033[35m cdn文件完整目录地址是：http://g.alicdn.com/mm/'+ projectName +'/' + tag + '/ \033[0m"',
+              'echo -e "\033[35m cdn文件完整目录地址是：http://g.alicdn.com/mm/' + projectName + '/' + tag + '/ \033[0m"',
               'git remote prune origin' //清理远程已发布的分枝
             ].join('&&')
           }
@@ -125,6 +142,7 @@ module.exports = function(grunt) {
     grunt.task.run('shell:saveBranch')
     grunt.task.run('shell:build')
     grunt.task.run('shell:checkoutDaily')
+    grunt.task.run('wait')
     grunt.task.run('shell:cdn')
 
   })

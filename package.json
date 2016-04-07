@@ -1,7 +1,7 @@
 {
   "name": "magix-app-deploy",
   "description": "deploy magix project and release to gitlab cdn",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "homepage": "https://github.com/chongzhi/magix-app-deploy",
   "author": {
     "name": "chongzhi",
@@ -30,7 +30,8 @@
   },
   "devDependencies": {
     "grunt": "~0.4.5",
-    "grunt-shell": "~0.7.0"
+    "grunt-shell": "~0.7.0",
+    "grunt-wait": ""
   },
   "peerDependencies": {
     "grunt": "~0.4.5"
