@@ -43,10 +43,10 @@ module.exports = function(grunt) {
     }
 
     grunt.initConfig({
-      //daily发完需要同步oss比较慢，所以做个延迟5S再发布到cdn
+      //daily发完需要同步oss比较慢，所以做个延迟10S再发布到cdn
       wait: {
         options: {
-          delay: 5000
+          delay: 10000
         },
         pause: {
           options: {
