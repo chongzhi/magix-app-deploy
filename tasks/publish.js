@@ -23,6 +23,7 @@ module.exports = function(grunt) {
       buildName = 'magix'
     }
 
+    var delay = args.delay || 10000
     var setVersion = args.setVersion
     var tag = grunt.template.today("yyyymmdd.HHMMss.l") //年月日.时分秒.毫秒
 
@@ -46,7 +47,7 @@ module.exports = function(grunt) {
       //daily发完需要同步oss比较慢，所以做个延迟10S再发布到cdn
       wait: {
         options: {
-          delay: 10000
+          delay: delay
         },
         pause: {
           options: {
