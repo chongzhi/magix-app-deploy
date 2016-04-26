@@ -23,31 +23,31 @@ module.exports = function(grunt) {
       buildName = 'magix'
     }
 
-    var delay = args.delay || 10000
+    var delay = args.delay === undefined ? 10000 : args.delay
     var setVersion = args.setVersion
     var tag = grunt.template.today("yyyymmdd.HHMMss.l") //年月日.时分秒.毫秒
 
     //获取切换分支前的分支名
-    function getCurrentBranch() {
-      var branchs = grunt.file.read('current_branch.md')
-      var current = /.*\*\s([\S]+)\s*/.exec(branchs)[1] //拿到当前分支名
-      console.log('所有分支：====> \n' + branchs)
-      console.log('当前分支：====> ' + current + '\n')
-      return current
-    }
+    // function getCurrentBranch() {
+    //   var branchs = grunt.file.read('current_branch.md')
+    //   var current = /.*\*\s([\S]+)\s*/.exec(branchs)[1] //拿到当前分支名
+    //   console.log('所有分支：====> \n' + branchs)
+    //   console.log('当前分支：====> ' + current + '\n')
+    //   return current
+    // }
 
     //获取当前项目名称，拼出cdn 或 daily 最终地址
-    function getProjectName() {
-      var pwd = grunt.file.read('pwd.md').trim().split('/')
-      var projectName = pwd[pwd.length - 1]
-      return projectName
-    }
+    // function getProjectName() {
+    //   var pwd = grunt.file.read('pwd.md').trim().split('/')
+    //   var projectName = pwd[pwd.length - 1]
+    //   return projectName
+    // }
 
     grunt.initConfig({
       //daily发完需要同步oss比较慢，所以做个延迟10S再发布到cdn
       wait: {
         options: {
-          delay: delay
+          delay: delay === false ? false : delay
         },
         pause: {
           options: {
@@ -66,15 +66,15 @@ module.exports = function(grunt) {
       shell: {
 
         //--------grunt publish---------
-        saveBranch: {
-          command: function() {
-            return [
-              'git checkout master',
-              'pwd > pwd.md',
-              'git branch > current_branch.md' //将当前分支信息临时写入文件，后面读取，同时防止commit没有更改的文件报错，abort流程
-            ].join('&&')
-          }
-        },
+        // saveBranch: {
+        //   command: function() {
+        //     return [
+        //       // 'git checkout master',
+        //       // 'pwd > pwd.md',
+        //       // 'git branch > current_branch.md' //将当前分支信息临时写入文件，后面读取，同时防止commit没有更改的文件报错，abort流程
+        //     ].join('&&')
+        //   }
+        // },
 
         build: {
           command: function() {
@@ -85,11 +85,11 @@ module.exports = function(grunt) {
               grunt.file.write(setVersion, index.replace(/var version = \'.+\'/, "var version = '" + tag + "'"))
             }
 
-            var currentBranch = getCurrentBranch()
+            // var currentBranch = getCurrentBranch()
             var commands = [
               'git add . -A',
-              'git commit -m "by magix-app-deploy - 崇志"',
-              'git push origin ' + currentBranch //master
+              'git commit -m "by magix-app-deploy - 崇志"'
+              // 'git push origin ' + currentBranch //master
             ]
 
             if (buildName) {
@@ -114,8 +114,8 @@ module.exports = function(grunt) {
         //发布daily之后的cdn发布
         cdn: {
           command: function() {
-            var projectName = getProjectName()
-              // var currentBranch = getCurrentBranch()
+            // var projectName = getProjectName()
+
             return [
               'git tag publish/' + tag,
               'git push origin publish/' + tag,
@@ -125,13 +125,12 @@ module.exports = function(grunt) {
               // 'git push origin :daily/' + tag, //删除远程已发布的daily分枝,
               // 不能直接删除远程daily分支，因为发布cdn还未成功
               // 稍后执行git remote prune origin 清理远程daily分支
-              'rm current_branch.md',
-              'rm pwd.md',
-              'git add . -A',
-              'git commit -m "delete current_branch.md"',
+              // 'rm current_branch.md',
+              // 'rm pwd.md',
+              // 'git add . -A',
+              // 'git commit -m "delete current_branch.md"',
               'git push origin master',
               'echo -e "\033[44;37m cdn发布成功，cdn版本号是: ' + tag + ' \033[0m"',
-              'echo -e "\033[35m cdn文件完整目录地址是：http://g.alicdn.com/mm/' + projectName + '/' + tag + '/ \033[0m"',
               'git remote prune origin' //清理远程已发布的分枝
             ].join('&&')
           }
@@ -140,7 +139,7 @@ module.exports = function(grunt) {
     })
 
     //从master checkout一个daily分支来开发项目
-    grunt.task.run('shell:saveBranch')
+    // grunt.task.run('shell:saveBranch')
     grunt.task.run('shell:build')
     grunt.task.run('shell:checkoutDaily')
     grunt.task.run('wait')
