@@ -20,7 +20,7 @@ module.exports = function(grunt) {
     var buildName = args.buildName
 
     if (buildName === undefined) {
-      buildName = 'magix'
+      buildName = 'grunt magix'
     }
 
     var delay = args.delay === undefined ? 10000 : args.delay
@@ -66,15 +66,15 @@ module.exports = function(grunt) {
       shell: {
 
         //--------grunt publish---------
-        // saveBranch: {
-        //   command: function() {
-        //     return [
-        //       // 'git checkout master',
-        //       // 'pwd > pwd.md',
-        //       // 'git branch > current_branch.md' //将当前分支信息临时写入文件，后面读取，同时防止commit没有更改的文件报错，abort流程
-        //     ].join('&&')
-        //   }
-        // },
+        saveBranch: {
+          command: function() {
+            return [
+              'git checkout master',
+              'pwd > pwd.md'
+              // 'git branch > current_branch.md' //将当前分支信息临时写入文件，后面读取，同时防止commit没有更改的文件报错，abort流程
+            ].join('&&')
+          }
+        },
 
         build: {
           command: function() {
@@ -93,7 +93,7 @@ module.exports = function(grunt) {
             ]
 
             if (buildName) {
-              commands.unshift('grunt ' + buildName)
+              commands.unshift(buildName)
             }
 
             return commands.join('&&')
@@ -126,9 +126,9 @@ module.exports = function(grunt) {
               // 不能直接删除远程daily分支，因为发布cdn还未成功
               // 稍后执行git remote prune origin 清理远程daily分支
               // 'rm current_branch.md',
-              // 'rm pwd.md',
-              // 'git add . -A',
-              // 'git commit -m "delete current_branch.md"',
+              'rm pwd.md',
+              'git add . -A',
+              'git commit -m "delete current_branch.md"',
               'git push origin master',
               'echo -e "\033[44;37m cdn发布成功，cdn版本号是: ' + tag + ' \033[0m"',
               'git remote prune origin' //清理远程已发布的分枝
@@ -139,7 +139,7 @@ module.exports = function(grunt) {
     })
 
     //从master checkout一个daily分支来开发项目
-    // grunt.task.run('shell:saveBranch')
+    grunt.task.run('shell:saveBranch')
     grunt.task.run('shell:build')
     grunt.task.run('shell:checkoutDaily')
     grunt.task.run('wait')
