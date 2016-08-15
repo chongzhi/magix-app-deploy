@@ -19,7 +19,7 @@ module.exports = function(grunt) {
     var args = this.options() || {}
     var buildName = args.buildName
     if (buildName === undefined) { //不传buildName默认执行grunt magix压缩工具
-      buildName = 'magix'
+      buildName = 'grunt magix'
     }
 
       //获取切换分支前的分支名
@@ -65,7 +65,7 @@ module.exports = function(grunt) {
             ]
 
             if (buildName) {
-              commands.unshift('grunt ' + buildName)
+              commands.unshift(buildName)
             }
 
             return commands.join('&&')
